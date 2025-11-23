@@ -22,7 +22,12 @@ time() # call function to tell time
   
 def wiki(): # to search on wikipedia
     speak("What would you like to know?")
-    query = input("What would you like to know: \n")
+    r = sr.Recognizer()
+    with sr.Microphone() as source:
+        print("I'm listening.. ")
+        r.pause_threshold = 1
+        audio = r.listen(source)
+    query = r.recognize_google(audio, language='en-in')  # type: ignore[attr-defined]
     result = wikipedia.summary(query, sentences=2) #specify how many lines to read
     speak(" according to wikipedia: \n")
     print(result)
@@ -34,13 +39,13 @@ def talk_to_me():
     # 1. Get input from user, convert to text and store 
     r = sr.Recognizer()
     with sr.Microphone() as source:
-        print("I'm listening.. ")
+        print("Listening.. ")
         r.pause_threshold = 1
         audio = r.listen(source)
         
     # 2. Save the info and make ai more believable 
     try:
-        query = r.recognize_google(audio, language='en-in')
+        query = r.recognize_google(audio, language='en-in')  # type: ignore[attr-defined]
         speak("Got you, analysing")
         print("Analysing..")
         speak(f"You asked {query}")
